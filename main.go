@@ -5,5 +5,6 @@ import (
 )
 
 func main() {
-	fmt.Printf("Hello, Go!")
+	//var answer = Answer{description: "42", isCorrect: true}
+	fmt.Printf("Hello, go!\n")
 }
