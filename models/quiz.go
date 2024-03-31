@@ -1,17 +1,19 @@
-package main
+package models
+
+//TODO
 
 type Quiz struct {
-	quiz_description string
-	questions        []Question
+	QuizDescription string `json: "description" bson: "description"`
+	Questions       []Question
 }
 
 type Question struct {
-	description      string
-	isMultibleChoice bool
-	answers          []Answer
+	Description      string `json: "description" bson: "description"`
+	IsMultipleChoice bool   `json: "isMultipleChoice bson: is_multiple_choice"`
+	Answers          []Answer
 }
 
 type Answer struct {
-	description string
-	isCorrect   bool
+	Description string `json: "description" bson: "description"`
+	IsCorrect   bool   `json: "isCorrect" bson: "is_correct"`
 }

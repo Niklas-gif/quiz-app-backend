@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-	//var answer = Answer{description: "42", isCorrect: true}
+	//var answer = models.Answer{Description: "Test", IsCorrect: true}
 	fmt.Printf("Hello, go!\n")
 }
