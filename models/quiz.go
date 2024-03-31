@@ -6,8 +6,9 @@ type Quiz struct {
 }
 
 type Question struct {
-	description string
-	answers     []Answer
+	description      string
+	isMultibleChoice bool
+	answers          []Answer
 }
 
 type Answer struct {
