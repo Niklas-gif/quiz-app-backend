@@ -4,10 +4,12 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/http"
 	"quiz-app/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -27,17 +29,32 @@ func init() {
 
 func main() {
 	initMongoDB()
-	//var answer = models.Answer{Description: "Test", IsCorrect: true}
-	fmt.Printf("Hello, go!\n")
 
 	//Example
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
+	router := gin.Default()
+	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
 	})
-	r.Run()
+
+	router.GET("/all", func(c *gin.Context) {
+		cursor, err := collection.Find(c, bson.D{{}})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		var quizzes []bson.M
+		if err = cursor.All(c, &quizzes); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, quizzes)
+
+	})
+
+	router.Run()
 }
 
 func initMongoDB() {
@@ -46,8 +63,8 @@ func initMongoDB() {
 		panic(err)
 	}
 
-	db = client.Database("your_database_name")
-	collection = db.Collection("your_collection_name")
+	db = client.Database("quiz_app")
+	collection = db.Collection("quiz_collection")
 	insertTest()
 	fmt.Println(client)
 }
@@ -77,7 +94,7 @@ func insertTest() {
 			Answers: []models.Answer{
 				{Description: "4", IsCorrect: true},
 				{Description: "42", IsCorrect: false},
-				{Description: "Banana", IsCorrect: true},
+				{Description: "Banana", IsCorrect: false},
 			},
 		},
 		},
