@@ -3,8 +3,11 @@ package database
 import (
 	"context"
 	"log"
+	"net/http"
 	"quiz-app/models"
 
+	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -24,7 +27,7 @@ func InitMongoDB() {
 	Collection = DB.Collection("quiz_collection")
 }
 
-func InsertExampleQuiz() {
+func InsertExampleQuiz(c *gin.Context) {
 	// Sample quiz data
 	sampleQuiz := models.Quiz{
 		QuizDescription: "Sample Quiz",
@@ -48,7 +51,7 @@ func InsertExampleQuiz() {
 		},
 	}
 	// Inserting sample quiz data into MongoDB
-	_, err := Collection.InsertOne(context.Background(), sampleQuiz)
+	_, err := Collection.InsertOne(c, sampleQuiz)
 	if err != nil {
 		log.Fatal("Failed to insert sample data into MongoDB:", err)
 	}
@@ -56,8 +59,19 @@ func InsertExampleQuiz() {
 
 //Quiz operations
 
-func GetAllQuizzes() {
+func GetAllQuizzes(c *gin.Context) {
+	cursor, err := Collection.Find(c, bson.D{{}})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
+	var quizzes []bson.M
+	if err = cursor.All(c, &quizzes); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, quizzes)
 }
 
 func GetQuiz() {

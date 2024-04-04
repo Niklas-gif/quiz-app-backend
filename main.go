@@ -3,12 +3,10 @@ package main
 import (
 	"context"
 	"log"
-	"net/http"
 	"quiz-app/database"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 func init() {
@@ -21,6 +19,7 @@ func init() {
 func main() {
 	database.InitMongoDB()
 	router := gin.Default()
+
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
@@ -28,23 +27,12 @@ func main() {
 	})
 
 	router.GET("/all", func(c *gin.Context) {
-		cursor, err := database.Collection.Find(c, bson.D{{}})
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		var quizzes []bson.M
-		if err = cursor.All(c, &quizzes); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-		c.JSON(http.StatusOK, quizzes)
+		database.GetAllQuizzes(c)
 
 	})
 
 	router.POST("/example", func(c *gin.Context) {
-		database.InsertExampleQuiz()
+		database.InsertExampleQuiz(c)
 	})
 
 	router.Run()
