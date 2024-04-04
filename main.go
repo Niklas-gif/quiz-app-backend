@@ -66,6 +66,7 @@ func initMongoDB() {
 
 	db = client.Database("quiz_app")
 	collection = db.Collection("quiz_collection")
+	//insertTest()
 }
 
 func insertTest() {
