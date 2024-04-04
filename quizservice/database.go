@@ -1,10 +1,10 @@
-package database
+package quizservice
 
 import (
 	"context"
 	"log"
 	"net/http"
-	"quiz-app/models"
+	"quiz-app/quizmodel"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -29,12 +29,12 @@ func InitMongoDB() {
 
 func InsertExampleQuiz(c *gin.Context) {
 	// Sample quiz data
-	sampleQuiz := models.Quiz{
+	sampleQuiz := quizmodel.Quiz{
 		QuizDescription: "Sample Quiz",
-		Questions: []models.Question{{
+		Questions: []quizmodel.Question{{
 			Description:      "Was ist die Hauptstadt von Deutschland?",
 			IsMultipleChoice: true,
-			Answers: []models.Answer{
+			Answers: []quizmodel.Answer{
 				{Description: "Paris", IsCorrect: false},
 				{Description: "London", IsCorrect: false},
 				{Description: "Berlin", IsCorrect: true},
@@ -42,7 +42,7 @@ func InsertExampleQuiz(c *gin.Context) {
 		}, {
 			Description:      "Was ist 2 + 2?",
 			IsMultipleChoice: false,
-			Answers: []models.Answer{
+			Answers: []quizmodel.Answer{
 				{Description: "4", IsCorrect: true},
 				{Description: "42", IsCorrect: false},
 				{Description: "Banana", IsCorrect: false},
