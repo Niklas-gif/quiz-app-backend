@@ -30,6 +30,7 @@ func InitMongoDB() {
 func InsertExampleQuiz(c *gin.Context) {
 	// Sample quiz data
 	sampleQuiz := quizmodel.Quiz{
+		QuizName:        "Quiz2",
 		QuizDescription: "Sample Quiz",
 		Questions: []quizmodel.Question{{
 			Description:      "Was ist die Hauptstadt von Deutschland?",
@@ -74,8 +75,23 @@ func GetAllQuizzes(c *gin.Context) {
 	c.JSON(http.StatusOK, quizzes)
 }
 
-func GetQuiz() {
+// TODO: Ignore upper and lower case!!!
+func GetQuizByName(c *gin.Context) {
+	name := c.Param("name")
 
+	cursor, err := Collection.Find(c, bson.M{"name": name})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	var quizzes []bson.M
+	if err := cursor.All(c, &quizzes); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, quizzes)
 }
 
 func DeleteQuiz() {

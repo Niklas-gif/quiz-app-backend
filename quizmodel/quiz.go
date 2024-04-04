@@ -3,6 +3,7 @@ package quizmodel
 //TODO ID
 
 type Quiz struct {
+	QuizName        string     `json:"name" bson:"name"`
 	QuizDescription string     `json:"description" bson:"description"`
 	Questions       []Question `json:"questions" bson:"questions"`
 }

@@ -26,9 +26,13 @@ func main() {
 		})
 	})
 
-	router.GET("/all", func(c *gin.Context) {
+	router.GET("/quizzes", func(c *gin.Context) {
 		quizservice.GetAllQuizzes(c)
 
+	})
+
+	router.GET("/quizzes/:name", func(c *gin.Context) {
+		quizservice.GetQuizByName(c)
 	})
 
 	router.POST("/example", func(c *gin.Context) {
