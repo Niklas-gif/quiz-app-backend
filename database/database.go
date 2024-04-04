@@ -10,9 +10,9 @@ import (
 )
 
 var (
-	client     *mongo.Client
-	db         *mongo.Database
-	collection *mongo.Collection
+	Client     *mongo.Client
+	DB         *mongo.Database
+	Collection *mongo.Collection
 )
 
 func InitMongoDB() {
@@ -20,8 +20,8 @@ func InitMongoDB() {
 	if err != nil {
 		panic(err)
 	}
-	db = client.Database("quiz_app")
-	collection = db.Collection("quiz_collection")
+	DB = client.Database("quiz_app")
+	Collection = DB.Collection("quiz_collection")
 }
 
 func InsertExampleQuiz() {
@@ -48,7 +48,7 @@ func InsertExampleQuiz() {
 		},
 	}
 	// Inserting sample quiz data into MongoDB
-	_, err := collection.InsertOne(context.Background(), sampleQuiz)
+	_, err := Collection.InsertOne(context.Background(), sampleQuiz)
 	if err != nil {
 		log.Fatal("Failed to insert sample data into MongoDB:", err)
 	}
