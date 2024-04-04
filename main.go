@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"quiz-app/models"
@@ -55,6 +54,8 @@ func main() {
 	})
 
 	router.Run()
+
+	defer client.Disconnect(context.Background())
 }
 
 func initMongoDB() {
@@ -65,16 +66,7 @@ func initMongoDB() {
 
 	db = client.Database("quiz_app")
 	collection = db.Collection("quiz_collection")
-	insertTest()
-	fmt.Println(client)
 }
-
-/*func insertTest() {
-	var _, err = collection.InsertOne(context.Background(), bson.M{"message": "This is a sample message from MongoDB"})
-	if err != nil {
-		log.Fatal("Failed to insert sample data into MongoDB:", err)
-	}
-}*/
 
 func insertTest() {
 	// Sample quiz data
