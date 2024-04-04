@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
+	"net/http"
+	"quiz-app/database"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func init() {
@@ -19,25 +19,35 @@ func init() {
 }
 
 func main() {
-	initMongoDB()
-	//var answer = models.Answer{Description: "Test", IsCorrect: true}
-	fmt.Printf("Hello, go!\n")
-
-	//Example
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
+	database.InitMongoDB()
+	router := gin.Default()
+	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
 	})
-	r.Run()
-}
 
-func initMongoDB() {
-	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI("mongodb://localhost:27017"))
-	if err != nil {
-		panic(err)
-	}
+	router.GET("/all", func(c *gin.Context) {
+		cursor, err := database.Collection.Find(c, bson.D{{}})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 
-	fmt.Println(client)
+		var quizzes []bson.M
+		if err = cursor.All(c, &quizzes); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, quizzes)
+
+	})
+
+	router.POST("/example", func(c *gin.Context) {
+		database.InsertExampleQuiz()
+	})
+
+	router.Run()
+
+	defer database.Client.Disconnect(context.Background())
 }
