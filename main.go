@@ -18,7 +18,7 @@ func init() {
 }
 
 func main() {
-	database.InitMongoDB()
+	//database.InitMongoDB()
 	router := gin.Default()
 
 	router.GET("/ping", func(c *gin.Context) {
