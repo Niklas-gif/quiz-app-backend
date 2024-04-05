@@ -36,6 +36,10 @@ func main() {
 		quizservice.GetQuizByName(c)
 	})
 
+	router.GET("/quizzes/:name/:index", func(c *gin.Context) {
+		quizservice.GetQuestion(c)
+	})
+
 	router.POST("/example", func(c *gin.Context) {
 		quizservice.InsertExampleQuiz(c)
 	})

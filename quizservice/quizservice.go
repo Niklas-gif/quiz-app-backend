@@ -1,10 +1,12 @@
 package quizservice
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"quiz-app/database"
 	"quiz-app/quizmodel"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -13,7 +15,6 @@ import (
 func InsertExampleQuiz(c *gin.Context) {
 	// Sample quiz data
 	sampleQuiz := quizmodel.Quiz{
-		ID:              42,
 		QuizName:        "Quiz2",
 		QuizDescription: "Sample Quiz",
 		Questions: []quizmodel.Question{{
@@ -25,18 +26,17 @@ func InsertExampleQuiz(c *gin.Context) {
 				{Description: "Berlin", IsCorrect: true},
 			},
 		}, {
-			ID:               0,
 			Description:      "Was ist 2 + 2?",
 			IsMultipleChoice: false,
 			Answers: []quizmodel.Answer{
-				{ID: 1, Description: "4", IsCorrect: true},
-				{ID: 2, Description: "42", IsCorrect: false},
-				{ID: 3, Description: "Banana", IsCorrect: false},
+				{Description: "4", IsCorrect: true},
+				{Description: "42", IsCorrect: false},
+				{Description: "Banana", IsCorrect: false},
 			},
 		},
 		},
 	}
-	// Inserting sample quiz data into MongoDB
+
 	_, err := database.Collection.InsertOne(c, sampleQuiz)
 	if err != nil {
 		log.Fatal("Failed to insert sample data into MongoDB:", err)
@@ -87,8 +87,26 @@ func AddQuiz() {
 
 }
 
-func getQuestion(c *gin.Context) {
+func GetQuestion(c *gin.Context) {
+	name := c.Param("name")
+	index := c.Param("index")
+	filter := bson.D{{"name", name}}
 
+	var quiz quizmodel.Quiz
+	err := database.Collection.FindOne(context.Background(), filter).Decode(&quiz)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to find quiz"})
+		return
+	}
+
+	i, err := strconv.Atoi(index)
+	if err != nil || i < 0 || i >= len(quiz.Questions) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid question index"})
+		return
+	}
+
+	question := quiz.Questions[i]
+	c.JSON(http.StatusOK, gin.H{"question": question})
 }
 
 func AddQuestion() {
