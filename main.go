@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"quiz-app/database"
 	"quiz-app/quizservice"
 
 	"github.com/gin-gonic/gin"
@@ -17,7 +18,7 @@ func init() {
 }
 
 func main() {
-	quizservice.InitMongoDB()
+	database.InitMongoDB()
 	router := gin.Default()
 
 	router.GET("/ping", func(c *gin.Context) {
@@ -41,5 +42,5 @@ func main() {
 
 	router.Run()
 
-	defer quizservice.Client.Disconnect(context.Background())
+	defer database.Client.Disconnect(context.Background())
 }

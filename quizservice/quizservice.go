@@ -1,31 +1,14 @@
 package quizservice
 
 import (
-	"context"
 	"log"
 	"net/http"
+	"quiz-app/database"
 	"quiz-app/quizmodel"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-var (
-	Client     *mongo.Client
-	DB         *mongo.Database
-	Collection *mongo.Collection
-)
-
-func InitMongoDB() {
-	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI("mongodb://localhost:27017"))
-	if err != nil {
-		panic(err)
-	}
-	DB = client.Database("quiz_app")
-	Collection = DB.Collection("quiz_collection")
-}
 
 func InsertExampleQuiz(c *gin.Context) {
 	// Sample quiz data
@@ -52,7 +35,7 @@ func InsertExampleQuiz(c *gin.Context) {
 		},
 	}
 	// Inserting sample quiz data into MongoDB
-	_, err := Collection.InsertOne(c, sampleQuiz)
+	_, err := database.Collection.InsertOne(c, sampleQuiz)
 	if err != nil {
 		log.Fatal("Failed to insert sample data into MongoDB:", err)
 	}
@@ -61,7 +44,7 @@ func InsertExampleQuiz(c *gin.Context) {
 //Quiz operations
 
 func GetAllQuizzes(c *gin.Context) {
-	cursor, err := Collection.Find(c, bson.D{{}})
+	cursor, err := database.Collection.Find(c, bson.D{{}})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -79,7 +62,7 @@ func GetAllQuizzes(c *gin.Context) {
 func GetQuizByName(c *gin.Context) {
 	name := c.Param("name")
 
-	cursor, err := Collection.Find(c, bson.M{"name": name})
+	cursor, err := database.Collection.Find(c, bson.M{"name": name})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
