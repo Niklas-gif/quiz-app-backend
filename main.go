@@ -40,6 +40,10 @@ func main() {
 		quizservice.InsertExampleQuiz(c)
 	})
 
+	router.POST("/quiz/:quizName/question/:questionIndex/answer", func(c *gin.Context) {
+		quizservice.AddAnswer(c)
+	})
+
 	router.Run()
 
 	defer database.Client.Disconnect(context.Background())

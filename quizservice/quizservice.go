@@ -13,6 +13,7 @@ import (
 func InsertExampleQuiz(c *gin.Context) {
 	// Sample quiz data
 	sampleQuiz := quizmodel.Quiz{
+		ID:              42,
 		QuizName:        "Quiz2",
 		QuizDescription: "Sample Quiz",
 		Questions: []quizmodel.Question{{
@@ -24,12 +25,13 @@ func InsertExampleQuiz(c *gin.Context) {
 				{Description: "Berlin", IsCorrect: true},
 			},
 		}, {
+			ID:               0,
 			Description:      "Was ist 2 + 2?",
 			IsMultipleChoice: false,
 			Answers: []quizmodel.Answer{
-				{Description: "4", IsCorrect: true},
-				{Description: "42", IsCorrect: false},
-				{Description: "Banana", IsCorrect: false},
+				{ID: 1, Description: "4", IsCorrect: true},
+				{ID: 2, Description: "42", IsCorrect: false},
+				{ID: 3, Description: "Banana", IsCorrect: false},
 			},
 		},
 		},
@@ -85,6 +87,10 @@ func AddQuiz() {
 
 }
 
+func getQuestion(c *gin.Context) {
+
+}
+
 func AddQuestion() {
 
 }
@@ -93,8 +99,8 @@ func DeleteQuestion() {
 
 }
 
-func AddAnswer() {
-
+func AddAnswer(c *gin.Context) {
+	//TODO
 }
 
 func DeleteAnswer() {
