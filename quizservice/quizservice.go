@@ -83,14 +83,19 @@ func DeleteQuiz() {
 
 }
 
-func AddQuiz() {
-
+func AddQuiz(c *gin.Context) {
+	var quiz quizmodel.Quiz
+	err := c.BindJSON(&quiz)
+	if err != nil {
+		return
+	}
+	database.Collection.InsertOne(c, quiz)
 }
 
 func GetQuestion(c *gin.Context) {
 	name := c.Param("name")
 	index := c.Param("index")
-	filter := bson.D{{"name", name}}
+	filter := bson.D{{Key: "name", Value: name}}
 
 	var quiz quizmodel.Quiz
 	err := database.Collection.FindOne(context.Background(), filter).Decode(&quiz)
@@ -109,7 +114,7 @@ func GetQuestion(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"question": question})
 }
 
-func AddQuestion() {
+func AddQuestion(c *gin.Context) {
 
 }
 

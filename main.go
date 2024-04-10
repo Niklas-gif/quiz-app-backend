@@ -44,8 +44,16 @@ func main() {
 		quizservice.InsertExampleQuiz(c)
 	})
 
-	router.POST("/quiz/:quizName/question/:questionIndex/answer", func(c *gin.Context) {
+	router.POST("/quizzes", func(c *gin.Context) {
+		quizservice.AddQuiz(c)
+	})
+
+	/*TODO: router.POST("/quiz/:quizName/question/:questionIndex/answer", func(c *gin.Context) {
 		quizservice.AddAnswer(c)
+	})*/
+
+	router.DELETE("/quizzes/:name/:index", func(c *gin.Context) {
+		quizservice.GetQuestion(c)
 	})
 
 	router.Run()
