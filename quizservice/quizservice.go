@@ -57,7 +57,7 @@ func GetAllQuizzes(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, quizzes)
+	c.IndentedJSON(http.StatusOK, quizzes)
 }
 
 // TODO: Ignore upper and lower case!!!
@@ -76,7 +76,7 @@ func GetQuizByName(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, quizzes)
+	c.IndentedJSON(http.StatusOK, quizzes)
 }
 
 func DeleteQuiz() {
@@ -111,7 +111,7 @@ func GetQuestion(c *gin.Context) {
 	}
 
 	question := quiz.Questions[i]
-	c.JSON(http.StatusOK, gin.H{"question": question})
+	c.IndentedJSON(http.StatusOK, gin.H{"question": question})
 }
 
 func AddQuestion(c *gin.Context) {
