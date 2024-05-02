@@ -36,15 +36,19 @@ func main() {
 		quizservice.GetQuizByName(c)
 	})
 
-	router.GET("/quizzes/:name/:index", func(c *gin.Context) {
+	router.GET("/quizzes/:name/:questionindex", func(c *gin.Context) {
 		quizservice.GetQuestion(c)
+	})
+
+	router.GET("/quizzes/:name/:questionindex/:answerindex", func(c *gin.Context) {
+		quizservice.GetAnswer(c)
 	})
 
 	router.POST("/example", func(c *gin.Context) {
 		quizservice.InsertExampleQuiz(c)
 	})
 
-	router.POST("/quizzes", func(c *gin.Context) {
+	router.POST("/add", func(c *gin.Context) {
 		quizservice.AddQuiz(c)
 	})
 
@@ -53,7 +57,7 @@ func main() {
 	})*/
 
 	router.DELETE("/quizzes/:name/:index", func(c *gin.Context) {
-		quizservice.GetQuestion(c)
+
 	})
 
 	router.Run()
