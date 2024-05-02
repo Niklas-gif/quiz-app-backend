@@ -13,31 +13,8 @@ import (
 )
 
 func InsertExampleQuiz(c *gin.Context) {
-	// Sample quiz data
-	sampleQuiz := quizmodel.Quiz{
-		QuizName:        "Quiz2",
-		QuizDescription: "Sample Quiz",
-		Questions: []quizmodel.Question{{
-			Description:      "Was ist die Hauptstadt von Deutschland?",
-			IsMultipleChoice: true,
-			Answers: []quizmodel.Answer{
-				{Description: "Paris", IsCorrect: false},
-				{Description: "London", IsCorrect: false},
-				{Description: "Berlin", IsCorrect: true},
-			},
-		}, {
-			Description:      "Was ist 2 + 2?",
-			IsMultipleChoice: false,
-			Answers: []quizmodel.Answer{
-				{Description: "4", IsCorrect: true},
-				{Description: "42", IsCorrect: false},
-				{Description: "Banana", IsCorrect: false},
-			},
-		},
-		},
-	}
 
-	_, err := database.Collection.InsertOne(c, sampleQuiz)
+	_, err := database.Collection.InsertOne(c, quizmodel.SampleQuiz)
 	if err != nil {
 		log.Fatal("Failed to insert sample data into MongoDB:", err)
 	}
@@ -92,7 +69,7 @@ func AddQuiz(c *gin.Context) {
 	database.Collection.InsertOne(c, quiz)
 }
 
-func GetQuestion(c *gin.Context) {
+func GetQuestion(c *gin.Context) *quizmodel.Question {
 	name := c.Param("name")
 	index := c.Param("index")
 	filter := bson.D{{Key: "name", Value: name}}
@@ -101,17 +78,18 @@ func GetQuestion(c *gin.Context) {
 	err := database.Collection.FindOne(context.Background(), filter).Decode(&quiz)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to find quiz"})
-		return
+		return nil
 	}
 
 	i, err := strconv.Atoi(index)
 	if err != nil || i < 0 || i >= len(quiz.Questions) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid question index"})
-		return
+		return nil
 	}
 
 	question := quiz.Questions[i]
 	c.IndentedJSON(http.StatusOK, gin.H{"question": question})
+	return &question
 }
 
 func AddQuestion(c *gin.Context) {
@@ -123,7 +101,7 @@ func DeleteQuestion() {
 }
 
 func AddAnswer(c *gin.Context) {
-	//TODO
+
 }
 
 func DeleteAnswer() {
