@@ -38,6 +38,10 @@ func AddQuestion(c *gin.Context) {
 
 }
 
+func UpdateQuestion(c *gin.Context) {
+
+}
+
 func DeleteQuestion() {
 
 }
