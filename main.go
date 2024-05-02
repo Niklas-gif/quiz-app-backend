@@ -44,6 +44,10 @@ func main() {
 		quizservice.GetAnswer(c)
 	})
 
+	router.PUT("/quizzes/:name", func(c *gin.Context) {
+		quizservice.AddQuestion(c)
+	})
+
 	router.POST("/example", func(c *gin.Context) {
 		quizservice.InsertExampleQuiz(c)
 	})

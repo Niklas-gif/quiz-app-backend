@@ -35,7 +35,31 @@ func GetQuestion(c *gin.Context) *quizmodel.Question {
 }
 
 func AddQuestion(c *gin.Context) {
+	var newQuestion quizmodel.Question
+	if err := c.BindJSON(&newQuestion); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to bind question data"})
+		return
+	}
 
+	name := c.Param("name")
+	filter := bson.D{{Key: "name", Value: name}}
+
+	var quiz quizmodel.Quiz
+	err := database.Collection.FindOne(context.Background(), filter).Decode(&quiz)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to find quiz"})
+		return
+	}
+
+	quiz.Questions = append(quiz.Questions, newQuestion)
+
+	_, err = database.Collection.UpdateOne(context.Background(), filter, bson.D{{Key: "$set", Value: quiz}})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update quiz with new question"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Question added successfully"})
 }
 
 func UpdateQuestion(c *gin.Context) {
