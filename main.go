@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"quiz-app/database"
+	"quiz-app/middleware"
 	"quiz-app/quizservice"
 
 	"github.com/gin-gonic/gin"
@@ -20,6 +21,8 @@ func init() {
 func main() {
 	//database.InitMongoDB()
 	router := gin.Default()
+
+	router.Use(middleware.ConfigureCORS)
 
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
