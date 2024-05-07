@@ -6,6 +6,7 @@ import (
 	"quiz-app/database"
 	"quiz-app/middleware"
 	"quiz-app/quizservice"
+	"quiz-app/userservice"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -28,6 +29,10 @@ func main() {
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
+	})
+
+	router.GET("/admin", func(c *gin.Context) {
+		userservice.CreateAdmin(c)
 	})
 
 	router.GET("/quizzes", func(c *gin.Context) {
