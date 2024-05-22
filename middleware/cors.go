@@ -6,20 +6,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ConfigureCORS(context *gin.Context) {
-	context.Header(
-		"Access-Control-Allow-Origin",
-		"http://localhost:3000",
-	)
+func ConfigureCORS(c *gin.Context) {
+	//TODO ALL ROUTES ARE ALLOWED!!!
+	origin := c.GetHeader("Origin")
 
-	context.Header(
-		"Access-Control-Allow-Methods",
-		"GET, POST, PUT, DELETE, OPTIONS",
-	)
-
-	if context.Request.Method == "OPTIONS" {
-		context.Status(http.StatusNoContent)
+	if origin == "http://localhost:3000" {
+		c.Header("Access-Control-Allow-Origin", origin)
 	}
 
-	context.Next()
+	c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+	c.Header("Access-Control-Allow-Headers", "Content-Type")
+
+	if c.Request.Method == "OPTIONS" {
+		c.AbortWithStatus(http.StatusOK)
+		return
+	}
+
+	c.Next()
 }
