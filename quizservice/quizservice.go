@@ -62,7 +62,13 @@ func AddQuiz(c *gin.Context) {
 	var quiz quizmodel.Quiz
 	err := c.BindJSON(&quiz)
 	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	database.Collection.InsertOne(c, quiz)
+
+	if _, err := database.Collection.InsertOne(c, quiz); err != nil {
+		//TODO this might be bad
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 }
