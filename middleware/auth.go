@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// AuthenticationMiddleware checks if the user has a valid JWT token
 func AuthenticationMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenString := c.GetHeader("Authorization")
@@ -18,7 +17,6 @@ func AuthenticationMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// The token should be prefixed with "Bearer "
 		tokenParts := strings.Split(tokenString, " ")
 		if len(tokenParts) != 2 || tokenParts[0] != "Bearer" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid authentication token"})
