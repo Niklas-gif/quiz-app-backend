@@ -13,14 +13,30 @@ import (
 
 func Login(c *gin.Context) {
 
-	//TODO verfiy ADMIN!
 	var user usermodel.User
-	var _ = database.DB.Collection("user").FindOne(c, bson.D{{Key: "id", Value: "1"}}).Decode(&user)
-	fmt.Printf("The user request value %v", user)
+	err := c.BindJSON(&user)
 
-	tokenString, err := utils.CreateToken(user.ID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Print(err)
+		return
 	}
-	c.JSON(http.StatusOK, gin.H{"token": tokenString})
+	//TODO
+	var admin usermodel.User
+	err = database.DB.Collection("user").FindOne(c, bson.D{{Key: "email", Value: "fake@mail.com"}}).Decode(&admin)
+
+	if err != nil {
+		fmt.Printf("The user request value %v", admin)
+		return
+	}
+
+	if user.Email == admin.Email {
+		tokenString, err := utils.CreateToken(admin.ID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"token": tokenString})
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{})
+	}
 }
