@@ -65,7 +65,7 @@ func main() {
 	})
 
 	router.POST("/add", func(c *gin.Context) {
-		quizservice.AddQuiz(c)
+		quizservice.InsertQuiz(c)
 	})
 
 	/*TODO: router.POST("/quiz/:quizName/question/:questionIndex/answer", func(c *gin.Context) {

@@ -1,21 +1,25 @@
 package quizservice
 
 import (
-	"log"
 	"net/http"
 	"quiz-app/database"
 	"quiz-app/quizmodel"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func InsertExampleQuiz(c *gin.Context) {
+var collection *mongo.Collection
 
-	_, err := database.Collection.InsertOne(c, quizmodel.SampleQuiz)
-	if err != nil {
-		log.Fatal("Failed to insert sample data into MongoDB:", err)
-	}
+func init() {
+	collection = database.Collection
+}
+
+func InsertExampleQuiz(c *gin.Context) error {
+
+	_, err := collection.InsertOne(c, quizmodel.SampleQuiz)
+	return err
 }
 
 //Quiz operations
@@ -58,7 +62,7 @@ func DeleteQuiz() {
 
 }
 
-func AddQuiz(c *gin.Context) {
+func InsertQuiz(c *gin.Context) {
 	var quiz quizmodel.Quiz
 	err := c.BindJSON(&quiz)
 	if err != nil {
