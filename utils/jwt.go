@@ -9,7 +9,7 @@ import (
 
 var secretKey = []byte("secretpassword")
 
-func GenerateToken(userID uint) (string, error) {
+func CreateToken(userID uint) (string, error) {
 	claims := jwt.MapClaims{}
 	claims["user_id"] = userID
 	claims["exp"] = time.Now().Add(time.Hour * 6).Unix()
