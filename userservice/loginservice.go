@@ -1,7 +1,6 @@
 package userservice
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"quiz-app/database"
@@ -12,25 +11,16 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func LoginService(w http.ResponseWriter, r *http.Request, c *gin.Context) {
-	w.Header().Set("Content-Type", "application/json")
+func Login(c *gin.Context) {
 
-	//TODO this is just for testing!
+	//TODO verfiy ADMIN!
 	var user usermodel.User
 	var _ = database.DB.Collection("user").FindOne(c, bson.D{{Key: "id", Value: "1"}}).Decode(&user)
-	json.NewDecoder(r.Body).Decode(&user)
 	fmt.Printf("The user request value %v", user)
 
-	if user.Email == "fake@mail.com" && user.Password == "Password1" {
-		tokenString, err := utils.CreateToken(user.ID)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-		}
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprint(w, tokenString)
-		return
-	} else {
-		w.WriteHeader(http.StatusUnauthorized)
-		fmt.Fprint(w, "Invalid credentials")
+	tokenString, err := utils.CreateToken(user.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
+	c.JSON(http.StatusOK, gin.H{"token": tokenString})
 }
