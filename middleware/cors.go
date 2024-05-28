@@ -7,7 +7,6 @@ import (
 )
 
 func ConfigureCORS(c *gin.Context) {
-	//TODO ALL ROUTES ARE ALLOWED!!!
 	origin := c.GetHeader("Origin")
 
 	if origin == "http://localhost:3000" {
