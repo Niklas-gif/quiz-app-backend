@@ -7,7 +7,6 @@ import (
 )
 
 func ConfigureCORS(c *gin.Context) {
-	//TODO ALL ROUTES ARE ALLOWED!!!
 	origin := c.GetHeader("Origin")
 
 	if origin == "http://localhost:3000" {
@@ -15,7 +14,7 @@ func ConfigureCORS(c *gin.Context) {
 	}
 
 	c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-	c.Header("Access-Control-Allow-Headers", "Content-Type")
+	c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
 	if c.Request.Method == "OPTIONS" {
 		c.AbortWithStatus(http.StatusOK)

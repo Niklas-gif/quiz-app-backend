@@ -20,7 +20,6 @@ func init() {
 }
 
 func main() {
-	//database.InitMongoDB()
 	router := gin.Default()
 
 	router.Use(middleware.ConfigureCORS)
