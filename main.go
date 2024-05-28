@@ -38,7 +38,7 @@ func main() {
 		userservice.Login(c)
 	})
 
-	router.GET("/quizzes" /*, middleware.AuthenticationMiddleware()*/, func(c *gin.Context) {
+	router.GET("/quizzes", func(c *gin.Context) {
 		quizservice.GetAllQuizzes(c)
 
 	})
@@ -63,7 +63,7 @@ func main() {
 		quizservice.InsertExampleQuiz(c)
 	})
 
-	router.POST("/add", func(c *gin.Context) {
+	router.POST("/add" /*, middleware.AuthenticationMiddleware()*/, func(c *gin.Context) {
 		quizservice.AddQuiz(c)
 	})
 
