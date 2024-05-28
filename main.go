@@ -20,7 +20,6 @@ func init() {
 }
 
 func main() {
-	//database.InitMongoDB()
 	router := gin.Default()
 
 	router.Use(middleware.ConfigureCORS)
@@ -39,7 +38,7 @@ func main() {
 		userservice.Login(c)
 	})
 
-	router.GET("/quizzes", func(c *gin.Context) {
+	router.GET("/quizzes" /*, middleware.AuthenticationMiddleware()*/, func(c *gin.Context) {
 		quizservice.GetAllQuizzes(c)
 
 	})
