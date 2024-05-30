@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func InsertExampleQuiz(c *gin.Context) {
@@ -66,13 +67,22 @@ func UpdateQuiz(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	//filter := bson.M{"_id": quiz.ID}
-	filter := bson.M{"name": quiz.QuizName}
-	update := bson.M{"$set": quiz}
+
+	objectID, err := primitive.ObjectIDFromHex(quiz.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid ID"})
+		return
+	}
+	filter := bson.M{"_id": objectID}
+	update := bson.M{"$set": bson.M{
+		"name":        quiz.QuizName,
+		"description": quiz.QuizDescription,
+		"questions":   quiz.Questions,
+	}}
+	fmt.Println("Updating quiz with ID:", quiz.ID)
 
 	if _, err := database.Collection.UpdateOne(c, filter, update); err != nil {
-
-		fmt.Print(quiz)
+		fmt.Print(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
