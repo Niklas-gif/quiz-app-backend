@@ -67,6 +67,10 @@ func main() {
 		quizservice.AddQuiz(c)
 	})
 
+	router.PUT("/update", func(c *gin.Context) {
+		quizservice.UpdateQuiz(c)
+	})
+
 	/*TODO: router.POST("/quiz/:quizName/question/:questionIndex/answer", func(c *gin.Context) {
 		quizservice.AddAnswer(c)
 	})*/

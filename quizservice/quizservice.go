@@ -1,6 +1,7 @@
 package quizservice
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"quiz-app/database"
@@ -65,10 +66,13 @@ func UpdateQuiz(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	filter := bson.M{"_id": quiz.ID}
+	//filter := bson.M{"_id": quiz.ID}
+	filter := bson.M{"name": quiz.QuizName}
+	update := bson.M{"$set": quiz}
 
-	if _, err := database.Collection.UpdateOne(c, quiz, filter); err != nil {
-		//TODO this might be bad
+	if _, err := database.Collection.UpdateOne(c, filter, update); err != nil {
+
+		fmt.Print(quiz)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
