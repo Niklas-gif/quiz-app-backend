@@ -14,22 +14,16 @@ import (
 func Login(c *gin.Context) {
 
 	var user usermodel.User
+	var admin usermodel.User
+
 	err := c.BindJSON(&user)
 
 	if err != nil {
 		fmt.Print(err)
 		return
 	}
-	//TODO
-	var admin usermodel.User
-	err = database.DB.Collection("user").FindOne(c, bson.D{{Key: "email", Value: "fake@mail.com"}}).Decode(&admin)
-
-	if err != nil {
-		fmt.Printf("The user request value %v", admin)
-		return
-	}
-
-	if user.Email == admin.Email {
+	_ = database.DB.Collection("user").FindOne(c, bson.D{{Key: "email", Value: "fake@mail.com"}}).Decode(&admin)
+	if user.Password == admin.Password && user.Email == admin.Email {
 		tokenString, err := utils.CreateToken(admin.ID)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
