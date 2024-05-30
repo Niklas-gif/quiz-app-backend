@@ -1,9 +1,12 @@
 package quizmodel
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 type Quiz struct {
-	QuizName        string     `json:"name" bson:"name"`
-	QuizDescription string     `json:"description" bson:"description"`
-	Questions       []Question `json:"questions" bson:"questions"`
+	ID              primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	QuizName        string             `json:"name" bson:"name"`
+	QuizDescription string             `json:"description" bson:"description"`
+	Questions       []Question         `json:"questions" bson:"questions"`
 }
 
 type Question struct {

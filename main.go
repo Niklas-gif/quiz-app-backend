@@ -63,7 +63,7 @@ func main() {
 		quizservice.InsertExampleQuiz(c)
 	})
 
-	router.POST("/add" /*, middleware.AuthenticationMiddleware()*/, func(c *gin.Context) {
+	router.PUT("/add" /*, middleware.AuthenticationMiddleware()*/, func(c *gin.Context) {
 		quizservice.AddQuiz(c)
 	})
 

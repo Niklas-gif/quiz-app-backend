@@ -58,6 +58,22 @@ func DeleteQuiz() {
 
 }
 
+func UpdateQuiz(c *gin.Context) {
+	var quiz quizmodel.Quiz
+	err := c.BindJSON(&quiz)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	filter := bson.M{"_id": quiz.ID}
+
+	if _, err := database.Collection.UpdateOne(c, quiz, filter); err != nil {
+		//TODO this might be bad
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+}
+
 func AddQuiz(c *gin.Context) {
 	var quiz quizmodel.Quiz
 	err := c.BindJSON(&quiz)
