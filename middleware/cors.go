@@ -11,7 +11,7 @@ func ConfigureCORS(c *gin.Context) {
 
 	allowedOrigins := []string{
 		"http://localhost:3000",
-		"http://192.168.178.21:3000",
+		//TODO setup env for local debug server and add the allowed origins there
 	}
 
 	isAllowed := false
