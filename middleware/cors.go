@@ -9,12 +9,25 @@ import (
 func ConfigureCORS(c *gin.Context) {
 	origin := c.GetHeader("Origin")
 
-	if origin == "http://localhost:3000" {
-		c.Header("Access-Control-Allow-Origin", origin)
+	allowedOrigins := []string{
+		"http://localhost:3000",
+		"http://192.168.178.21:3000",
 	}
 
-	c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-	c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+	isAllowed := false
+	for _, o := range allowedOrigins {
+		if origin == o {
+			isAllowed = true
+			break
+		}
+	}
+
+	if isAllowed {
+		c.Header("Access-Control-Allow-Origin", origin)
+		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		c.Header("Access-Control-Allow-Credentials", "true")
+	}
 
 	if c.Request.Method == "OPTIONS" {
 		c.AbortWithStatus(http.StatusOK)

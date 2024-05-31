@@ -21,6 +21,7 @@ func init() {
 
 func main() {
 	router := gin.Default()
+	//router.Run("0.0.0.0:3030")
 
 	router.Use(middleware.ConfigureCORS)
 
@@ -79,7 +80,7 @@ func main() {
 
 	})
 
-	router.Run()
+	router.Run("0.0.0.0:3030")
 
 	defer database.Client.Disconnect(context.Background())
 }
