@@ -56,7 +56,27 @@ func GetQuizByName(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, quizzes)
 }
 
-func DeleteQuiz() {
+func DeleteQuiz(c *gin.Context) {
+	var quiz quizmodel.Quiz
+	err := c.BindJSON(&quiz)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	objectID, err := primitive.ObjectIDFromHex(quiz.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	filter := bson.M{"_id": objectID}
+
+	if _, err := database.Collection.DeleteOne(c, filter); err != nil {
+		fmt.Print(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
 }
 

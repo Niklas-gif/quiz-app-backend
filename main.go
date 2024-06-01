@@ -76,8 +76,8 @@ func main() {
 		quizservice.AddAnswer(c)
 	})*/
 
-	router.DELETE("/quizzes/:name/:index", func(c *gin.Context) {
-
+	router.DELETE("/delete", func(c *gin.Context) {
+		quizservice.DeleteQuiz(c)
 	})
 
 	router.Run("0.0.0.0:3030")
