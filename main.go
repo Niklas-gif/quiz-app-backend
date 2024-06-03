@@ -64,19 +64,15 @@ func main() {
 		quizservice.InsertExampleQuiz(c)
 	})
 
-	router.PUT("/add" /*, middleware.AuthenticationMiddleware()*/, func(c *gin.Context) {
+	router.PUT("/add", middleware.AuthenticationMiddleware(), func(c *gin.Context) {
 		quizservice.AddQuiz(c)
 	})
 
-	router.PUT("/update", func(c *gin.Context) {
+	router.PUT("/update", middleware.AuthenticationMiddleware(), func(c *gin.Context) {
 		quizservice.UpdateQuiz(c)
 	})
 
-	/*TODO: router.POST("/quiz/:quizName/question/:questionIndex/answer", func(c *gin.Context) {
-		quizservice.AddAnswer(c)
-	})*/
-
-	router.DELETE("/delete", func(c *gin.Context) {
+	router.DELETE("/delete", middleware.AuthenticationMiddleware(), func(c *gin.Context) {
 		quizservice.DeleteQuiz(c)
 	})
 
