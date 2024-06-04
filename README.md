@@ -15,4 +15,8 @@ Just visit "localhost:3030/admin" this will create a admin login for testing.\
 Email    -> fake@mail.com\
 Password -> Password1
 
-Link to the frontend --> https://github.com/Niklas-gif/quiz-app-frontend/tree/main
+### Run with docker
+
+```cd docker```\
+```docker-compose up --build```
+you still have to create the Admin!

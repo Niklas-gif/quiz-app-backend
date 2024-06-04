@@ -2,13 +2,23 @@ version: '3.8'
 
 services:
   backend:
-    build: .
+    build:
+      context: ./backend
     container_name: go-backend
     ports:
       - "3030:3030"
     depends_on:
       - mongo
 
+  frontend:
+    build:
+      context: ./frontend
+    container_name: nuxt-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+      
   mongo:
     image: mongodb/mongodb-community-server
     container_name: mongodbquizapp
