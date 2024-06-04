@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"log"
+	"quiz-app/quizmodel"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -22,6 +23,25 @@ func init() {
 	}
 	DB = client.Database("quiz_app")
 	Collection = DB.Collection("quiz_collection")
+
+	for _, quiz := range quizmodel.ExampleQuizzes {
+		filter := bson.M{"name": quiz.QuizName}
+		var existingQuiz quizmodel.Quiz
+		err := Collection.FindOne(context.Background(), filter).Decode(&existingQuiz)
+		if err == mongo.ErrNoDocuments {
+			_, err := Collection.InsertOne(context.Background(), quiz)
+			if err != nil {
+				log.Fatalf("Failed to insert data: %v", err)
+			}
+			log.Printf("Inserted quiz: %s\n", quiz.QuizName)
+		} else if err != nil {
+			log.Fatalf("Failed to check existing data: %v", err)
+		} else {
+			log.Printf("Quiz already exists: %s\n", quiz.QuizName)
+		}
+	}
+
+	log.Println("Initial data inserted successfully")
 
 	indexModel := mongo.IndexModel{
 		Keys: bson.M{
