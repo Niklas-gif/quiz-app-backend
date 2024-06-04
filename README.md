@@ -9,14 +9,17 @@
 ```cd quiz-app-backend```\
 ```go run main.go``` 
 
+### Run with docker
+
+```cd docker```\
+```docker-compose up --build```
+
 ### Create Admin for testing
 
 Just visit "localhost:3030/admin" this will create a admin login for testing.\
 Email    -> fake@mail.com\
 Password -> Password1
 
-### Run with docker
+## Link to frontend
 
-```cd docker```\
-```docker-compose up --build```
-you still have to create the Admin!
+https://github.com/Niklas-gif/quiz-app-frontend/tree/main
