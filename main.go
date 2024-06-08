@@ -31,10 +31,6 @@ func main() {
 		})
 	})
 
-	router.GET("/admin", func(c *gin.Context) {
-		userservice.CreateAdmin(c)
-	})
-
 	router.POST("/login", func(c *gin.Context) {
 		userservice.Login(c)
 	})
