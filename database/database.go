@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"quiz-app/quizmodel"
+	"quiz-app/usermodel"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -24,6 +25,7 @@ func init() {
 	DB = client.Database("quiz_app")
 	Collection = DB.Collection("quiz_collection")
 
+	//Seeding database
 	for _, quiz := range quizmodel.ExampleQuizzes {
 		filter := bson.M{"name": quiz.QuizName}
 		var existingQuiz quizmodel.Quiz
@@ -43,6 +45,7 @@ func init() {
 
 	log.Println("Initial data inserted successfully")
 
+	createAdmin()
 	indexModel := mongo.IndexModel{
 		Keys: bson.M{
 			"name": 1,
@@ -54,4 +57,27 @@ func init() {
 	if err != nil {
 		log.Fatalf("Failed to create index: %v", err)
 	}
+}
+
+func createAdmin() {
+	newUser := usermodel.User{
+		ID:       1,
+		Email:    "fake@mail.com",
+		Password: "Password1",
+	}
+
+	userCollection := DB.Collection("user")
+	filter := bson.D{{Key: "id", Value: newUser.ID}}
+
+	var user usermodel.User
+	response := userCollection.FindOne(context.Background(), filter).Decode(&user)
+	if response != nil {
+		println("response%s", response)
+
+	}
+	if user.ID == newUser.ID {
+		return
+	}
+	userCollection.InsertOne(context.Background(), newUser)
+
 }
