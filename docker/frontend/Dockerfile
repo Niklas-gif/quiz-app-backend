@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Clone the frontend repository
 RUN apk add --no-cache git
-RUN git clone -b redesign https://github.com/Niklas-gif/quiz-app-frontend.git .
+RUN git clone -b development https://github.com/Niklas-gif/quiz-app-frontend.git .
 
 # Install dependencies
 RUN npm install
