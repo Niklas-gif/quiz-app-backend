@@ -30,7 +30,7 @@ var (
 			Questions: []Question{
 				{
 					Description:      "What is the chemical symbol for water?",
-					IsMultipleChoice: true,
+					IsMultipleChoice: false,
 					Answers: []Answer{
 						{Description: "H2O", IsCorrect: true},
 						{Description: "O2", IsCorrect: false},
@@ -40,7 +40,7 @@ var (
 				},
 				{
 					Description:      "What planet is known as the Red Planet?",
-					IsMultipleChoice: true,
+					IsMultipleChoice: false,
 					Answers: []Answer{
 						{Description: "Mars", IsCorrect: true},
 						{Description: "Venus", IsCorrect: false},
@@ -56,7 +56,7 @@ var (
 			Questions: []Question{
 				{
 					Description:      "What is 2 + 2?",
-					IsMultipleChoice: true,
+					IsMultipleChoice: false,
 					Answers: []Answer{
 						{Description: "4", IsCorrect: true},
 						{Description: "22", IsCorrect: false},
@@ -66,7 +66,7 @@ var (
 				},
 				{
 					Description:      "What is the square root of 9?",
-					IsMultipleChoice: true,
+					IsMultipleChoice: false,
 					Answers: []Answer{
 						{Description: "3", IsCorrect: true},
 						{Description: "81", IsCorrect: false},
