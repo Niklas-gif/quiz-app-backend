@@ -2,7 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -12,7 +11,7 @@ var secretKey = []byte("secretpassword")
 func CreateToken(userID uint) (string, error) {
 	claims := jwt.MapClaims{}
 	claims["user_id"] = userID
-	claims["exp"] = time.Now().Add(time.Hour * 6).Unix()
+	//claims["exp"] = time.Now().Add(time.Hour * 6).Unix()
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(secretKey)
